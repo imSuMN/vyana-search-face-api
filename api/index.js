@@ -48,7 +48,7 @@ app.post("/searchFaces/:eventId", upload.single("faceImage"), async (req, res) =
     for (const face of resp.FaceMatches ?? []) {
       const s3input = {
         Bucket: process.env.BucketName,
-        Key: `${eventId}/` + face.Face?.ExternalImageId + ".jpg",
+        Key: `${req.params.eventId}/` + face.Face?.ExternalImageId + ".jpg",
       };
       const s3Command = new GetObjectCommand(s3input);
       const s3Res = await s3Client.send(s3Command);
@@ -61,7 +61,7 @@ app.post("/searchFaces/:eventId", upload.single("faceImage"), async (req, res) =
     return res.status(200).json({ matchedFaces: res.FaceMatches, images });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: "Error Searching photos" });
+    res.status(500).json({ error: "Error Searching photos",error });
   }
 });
 
